@@ -1,0 +1,43 @@
+<!doctype html>
+<title>film deets app</title>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css')}}">
+	<div class="page">
+		<div class="header">
+			<h1>Movie Details!</h1>
+		</div>
+		<div class="moviedeets">
+			<div class='rate'>
+				<h3>
+					Average Rating: 
+				</h3>
+				<div class='rating'>
+					{{ avg }}
+				</div>
+			</div>
+			<div class='filmID'>
+				<h3>
+					Film ID: 
+				</h3>
+				<div class='id'>
+					{{ md._id }}
+				</div> 
+			</div>
+			<h3>
+				Title/Year: 
+			</h3>
+			<div class='title'>
+				{{ md.title }}
+			</div> 
+			<h3>
+				Genre(s): 
+			</h3>
+			<div class='genre'>
+			{% for genre in md.genres %}
+				{{ genre }}
+			{% endfor %}
+			</div>
+		</div>
+		<div class='link'>
+			For more movie info click <a href = '/'>here</a>. 
+		</div>
+	</div>

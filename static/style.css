@@ -1,0 +1,55 @@
+body { 
+	background-color:#99FFFF; 
+	font-family:"Tahoma";
+}
+
+div.header {
+	text-align:center;
+}
+
+div.page {
+	/*text-align:center*/;
+}
+
+div.moviesubmit {
+	margin-left:380px;
+}
+
+div.avg {
+	text-align:center;
+}
+
+div.input { 
+	width:500px; 
+	position:relative;
+}
+
+div.box { 
+	width: 50%; 
+	position:absolute;
+}
+
+div.submit {
+	width: 50%; 
+	position:absolute;
+	left:30%;
+	top: 0;
+}
+
+div.moviedeets {
+	margin-left:380px;
+}
+
+div.link {
+	margin-top: 100px;
+	margin-left:500px;
+}
+
+div.rate {
+	position: absolute;
+
+}
+
+div.filmID {
+	margin-left: 200px;
+}

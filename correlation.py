@@ -19,13 +19,13 @@ def pearson_similarity(film1_ratings, film2_ratings):
     if len(common_critics) == 0:
         return 0
 
-    film1_sum = sum(film1_critics[critic] for critic in common_critics)
-    film2_sum = sum(film2_critics[critic] for critic in common_critics)
+    film1_sum = sum(film1_ratings[critic] for critic in common_critics)
+    film2_sum = sum(film2_ratings[critic] for critic in common_critics)
 
-    film1_sum_square  = sum([pow(film1_critics[critic], 2) for critic in common_critics])
-    film2_sum_square  = sum([pow(film2_critics[critic], 2) for critic in common_critics])
+    film1_sum_square  = sum([pow(film1_ratings[critic], 2) for critic in common_critics])
+    film2_sum_square  = sum([pow(film2_ratings[critic], 2) for critic in common_critics])
 
-    product_sum = sum([film1_critics[critic] * film2_critics[critic] for critic in common_critics])
+    product_sum = sum([film1_ratings[critic] * film2_ratings[critic] for critic in common_critics])
 
     # Calculate the pearson score
     num_critics = len(common_critics)

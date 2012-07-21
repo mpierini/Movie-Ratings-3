@@ -1,0 +1,17 @@
+<!doctype html>
+<title>film deets app</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css')}}">
+<div class="page">
+	<div class="header">
+		<h1>Movie Database Explosion!</h1>
+	</div>
+	<div class="moviesubmit">
+		<h3>Film ID: </h3>
+		<div class="input">
+			<form action="{{ url_for('movie_details') }}" method="POST">
+				<div class="box"><input type='text' name='movie_id' /></div>
+				<div class="submit"><input type='submit' value='Submit' /></div>
+			</form>
+		</div>
+	</div>
+</div>

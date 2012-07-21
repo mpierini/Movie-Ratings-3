@@ -6,7 +6,7 @@ import pymongo
 from collections import defaultdict
 import traceback
 import model
-from model import User
+from model import User, Movies
 
 global db
 
@@ -16,10 +16,10 @@ def movie_details(movie_id):
     if not movie:
         print "No movie with id %d"%movie_id
 
-    print """\
+    return """\
 %d: %s
 %s"""%(movie['_id'], movie['title'], ", ".join(movie['genres']))
-    pass
+
 
 def error(msg = "Unknown command"):
     print "Error:", msg
@@ -33,7 +33,7 @@ def average_rating(movie_id):
     ratings = [ rec['rating'] for rec in rating_records ]
     avg = float(sum(ratings))/len(ratings)
 
-    print "%.2f"%(avg)
+    return "%.2f"%(avg)
 
 def user_details(user_id):
     user = User.get(user_id)
@@ -75,12 +75,36 @@ def get_rating(movie_id, user_id):
     if record:
         return record['rating']
 
-def predict(movie_id):
-    ratings = get_ratings(movie_id=movie_id)
-    target_movie = get_movie(movie_id)
+def movie_ids(user_id): 
+    ratings = get_ratings(user_id=0)
+    movie_ids = []
+    #rates is the item to iterate by
+    for rates in ratings:
+        movie_ids.append(rates['movie_id'])
+    return movie_ids
 
-    for movie in rated_movies:
-    similarities = [ (pearson({}, {}) rating) for target_movie_id, rating in movie_pairs]
+def predict(movie_id):
+    target_movie = Movies.get(movie_id)
+    #target_movie = get_movie(movie_id)
+    target_ratings = make_target_ratings(movie_id)
+    # target_movie_rating = rating
+    my_movie_ids = movie_ids(0)
+
+    movies_to_compare = []
+    for id in my_movie_ids:
+        ratings = make_target_ratings(id)
+        movies_to_compare.append(ratings)
+
+    similarities = []
+
+    for ratings in movies_to_compare:
+        our_rating = ratings[0] # ratings is not a list, it is a dictionary
+        similarity = pearson(target_ratings, ratings)
+        tup = (similarity, our_rating)
+        similarities.append(tup)
+
+    # (similarity, ranking)
+
     top_five = sorted(similarities)
     top_five.reverse()
     top_five = top_five[:5]
@@ -95,6 +119,15 @@ def predict(movie_id):
     print "Best guess for movie %d: %s is %.2f stars"%\
             (movie_id, target_movie['title'], rating)
 
+def make_target_ratings(movie_id):
+    rated_movies = get_ratings(movie_id)
+    ratings_dict = {}
+    for each in rated_movies:
+        key = each['user_id']
+        value = each['rating']
+        ratings_dict[key] = value 
+    # print ratings_dict
+    return ratings_dict
 
 def parse(line, dispatch):
     tokens = line.split()
@@ -137,6 +170,8 @@ def main():
     db = connect_db("dbh36.mongolab.com", 27367, "movie_user", "password", "movies")
     db = db['movies']
     model.db = db
+
+    # make_target_ratings(1)
 
     dispatch = {
             "movie": (movie_details, int),
